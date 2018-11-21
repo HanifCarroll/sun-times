@@ -67,6 +67,7 @@ class App extends Component {
     if (!results[0]) {
       return this.setState({ error: "No matches found for that location." });
     }
+
     const extractedResults = extractGeoData(results);
     this.setState({ geoInfo: { ...extractedResults } });
 
@@ -122,7 +123,7 @@ class App extends Component {
   };
 
   render() {
-    const { location, times, geoInfo } = this.state;
+    const { location, times, geoInfo, error } = this.state;
 
     return (
       <div className="App">
@@ -136,7 +137,7 @@ class App extends Component {
           getLocation={this.getLocation}
           setLocation={this.setLocation}
         />
-        <Location geoInfo={geoInfo} />
+        <Location geoInfo={geoInfo} error={error} />
         <Times times={times} />
       </div>
     );
