@@ -3,7 +3,7 @@ import Axios from "axios";
 import { format } from "date-fns";
 import { APIKEY, RESULTSLIMIT } from "./config";
 
-import { Calendar } from "./components";
+import { Calendar, Times } from "./components";
 
 class App extends Component {
   state = {
@@ -121,7 +121,6 @@ class App extends Component {
 
   render() {
     const { location, times } = this.state;
-    const { sunrise, sunset, noon } = times;
 
     return (
       <div className="App">
@@ -138,9 +137,7 @@ class App extends Component {
           Use Input Location
         </button>
         {this.renderLocation()}
-        <p>Sunrise - {sunrise}</p>
-        <p>Solar Noon - {noon}</p>
-        <p>Sunset - {sunset}</p>
+        <Times times={times} />
       </div>
     );
   }
