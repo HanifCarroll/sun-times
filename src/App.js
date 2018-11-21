@@ -23,7 +23,17 @@ class App extends Component {
     }
   };
 
-  getData = async () => {
+  getTimes = async () => {
+    const url = this.makeUrl();
+
+    const {
+      data: { results },
+    } = await Axios.get(url).catch(err => console.log(err));
+
+    this.extractTimes(results);
+  };
+
+  makeUrl = () => {
     const { lat, lng, date } = this.state;
 
     let url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`;
@@ -32,17 +42,13 @@ class App extends Component {
       url += `&date=${date}`;
     }
 
-    const {
-      data: { results },
-    } = await Axios.get(url).catch(err => console.log(err));
+    return url;
+  };
 
-    this.setState({
-      times: { sunrise: results.sunrise, sunset: results.sunset },
-    });
-
-    let sunrise = new Date(results.sunrise).toLocaleTimeString();
-    let sunset = new Date(results.sunset).toLocaleTimeString();
-    let noon = new Date(results.solar_noon).toLocaleTimeString();
+  extractTimes = results => {
+    const sunrise = new Date(results.sunrise).toLocaleTimeString();
+    const sunset = new Date(results.sunset).toLocaleTimeString();
+    const noon = new Date(results.solar_noon).toLocaleTimeString();
 
     this.setState({ times: { sunrise, sunset, noon } });
   };
@@ -59,7 +65,7 @@ class App extends Component {
       <div className="App">
         <h1>App</h1>
         <Calendar onChange={date => this.onCalendarChange(date)} />
-        <button onClick={this.getData}>Get Data</button>
+        <button onClick={this.getTimes}>Get Data</button>
         <button onClick={this.getLocation}>Use My Location</button>
 
         <p>Sunrise - {sunrise}</p>
