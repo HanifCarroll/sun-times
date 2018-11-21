@@ -15,12 +15,21 @@ class App extends Component {
 
   getLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
+      navigator.geolocation.getCurrentPosition(async position => {
         const {
           coords: { latitude, longitude },
         } = position;
 
-        this.setState({ lat: latitude, lng: longitude });
+        const apiKey = "9e59bc25-9417-438f-860e-926289f82523";
+        const resultsLimit = 1;
+        const point = `${latitude},${longitude}`;
+        const url = `https://graphhopper.com/api/1/geocode?point=${point}&limit=${resultsLimit}&reverse=true&key=${apiKey}`;
+
+        const {
+          data: { hits: results },
+        } = await Axios.get(url);
+
+        this.extractGeoData(results);
       });
     }
   };
