@@ -21,3 +21,13 @@ export const convertDate = date => {
   const format = "YYYY-MM-DD";
   return moment(date).format(format);
 };
+
+export const makeSunURL = ({ lat, lng, date }) => {
+  let url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`;
+
+  if (date) {
+    url += `&date=${date}`;
+  }
+
+  return url;
+};

@@ -3,7 +3,7 @@ import Axios from "axios";
 import { APIKEY, RESULTSLIMIT } from "./config";
 
 import { Header, Calendar, Location, Times, Buttons } from "./components";
-import { convertTimes, getTimezone, convertDate } from "./helpers";
+import { convertTimes, getTimezone, convertDate, makeSunURL } from "./helpers";
 
 class App extends Component {
   state = {
@@ -79,28 +79,15 @@ class App extends Component {
   };
 
   getTimes = async () => {
-    const url = this.makeSunUrl();
+    const { lat, lng } = this.state.geoInfo.point;
+    const { date } = this.state;
+    const url = makeSunURL({ lat, lng, date });
 
     const {
       data: { results },
     } = await Axios.get(url).catch(err => console.log(err));
 
     this.extractTimes(results);
-  };
-
-  makeSunUrl = () => {
-    const { geoInfo, date } = this.state;
-    const {
-      point: { lat, lng },
-    } = geoInfo;
-
-    let url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`;
-
-    if (date) {
-      url += `&date=${date}`;
-    }
-
-    return url;
   };
 
   extractTimes = ({ sunrise, sunset, solar_noon }) => {
