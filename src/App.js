@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import Axios from "axios";
-import Calendar from "react-calendar";
 import { format } from "date-fns";
 import { APIKEY, RESULTSLIMIT } from "./config";
+
+import { Calendar } from "./components";
 
 class App extends Component {
   state = {
@@ -55,7 +56,6 @@ class App extends Component {
 
   extractGeoData = results => {
     if (results[0]) {
-      console.log(results[0]);
       const { country, state, city, name, point } = results[0];
 
       this.setState({ geoInfo: { country, state, city, name, point } });
@@ -91,7 +91,6 @@ class App extends Component {
   };
 
   extractTimes = results => {
-    console.log(results);
     const sunrise = new Date(results.sunrise).toLocaleTimeString();
     const sunset = new Date(results.sunset).toLocaleTimeString();
     const noon = new Date(results.solar_noon).toLocaleTimeString();
@@ -126,7 +125,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1>App</h1>
+        <h1>Sun Times</h1>
         <Calendar onChange={date => this.onCalendarChange(date)} />
         <button onClick={this.getTimes}>Get Data</button>
         <button onClick={this.getLocation}>Use My Location</button>
@@ -138,7 +137,6 @@ class App extends Component {
         <button onClick={this.setLocation} disabled={!location}>
           Use Input Location
         </button>
-        {console.log(this.state)}
         {this.renderLocation()}
         <p>Sunrise - {sunrise}</p>
         <p>Solar Noon - {noon}</p>
