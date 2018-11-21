@@ -7,6 +7,8 @@ class App extends Component {
   state = {
     lat: null,
     lng: null,
+    location: "",
+    geoInfo: {},
     date: null,
     times: {},
   };
@@ -23,8 +25,40 @@ class App extends Component {
     }
   };
 
+  setLocation = () => {
+    const { location } = this.state;
+
+    const locationURI = encodeURIComponent(location);
+
+    this.geocodeLocation(locationURI);
+  };
+
+  geocodeLocation = async location => {
+    const apiKey = "9e59bc25-9417-438f-860e-926289f82523";
+    const resultsLimit = 1;
+    const url = `https://graphhopper.com/api/1/geocode?q=${location}&limit=${resultsLimit}&key=${apiKey}`;
+
+    const {
+      data: { hits: results },
+    } = await Axios.get(url);
+
+    this.extractGeoData(results);
+  };
+
+  extractGeoData = results => {
+    if (results[0]) {
+      console.log(results[0]);
+      const { country, state, name, point } = results[0];
+
+      this.setState({ geoInfo: { country, state, name, point } });
+    } else {
+      console.log("Query not found.");
+      this.setState({ geoInfo: {} });
+    }
+  };
+
   getTimes = async () => {
-    const url = this.makeUrl();
+    const url = this.makeSunUrl();
 
     const {
       data: { results },
@@ -33,7 +67,7 @@ class App extends Component {
     this.extractTimes(results);
   };
 
-  makeUrl = () => {
+  makeSunUrl = () => {
     const { lat, lng, date } = this.state;
 
     let url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`;
@@ -59,7 +93,7 @@ class App extends Component {
   };
 
   render() {
-    const { sunrise, sunset, noon } = this.state.times;
+    const { sunrise, sunset, noon, location } = this.state.times;
 
     return (
       <div className="App">
@@ -67,7 +101,13 @@ class App extends Component {
         <Calendar onChange={date => this.onCalendarChange(date)} />
         <button onClick={this.getTimes}>Get Data</button>
         <button onClick={this.getLocation}>Use My Location</button>
-
+        <input
+          type="text"
+          value={location}
+          onChange={e => this.setState({ location: e.target.value })}
+        />
+        <button onClick={this.setLocation}>Use Input Location</button>
+        {console.log(this.state)}
         <p>Sunrise - {sunrise}</p>
         <p>Noon - {noon}</p>
         <p>Sunset - {sunset}</p>
