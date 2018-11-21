@@ -3,7 +3,7 @@ import Axios from "axios";
 import { format } from "date-fns";
 import { APIKEY, RESULTSLIMIT } from "./config";
 
-import { Calendar, Times } from "./components";
+import { Header, Calendar, Location, Times, Buttons } from "./components";
 
 class App extends Component {
   state = {
@@ -103,40 +103,25 @@ class App extends Component {
     this.setState({ date });
   };
 
-  renderLocation = () => {
-    const {
-      geoInfo: { country, state, city, name },
-    } = this.state;
-
-    let locationString = "";
-    name ? (locationString += `${name}`) : (locationString += "");
-    city && city !== name
-      ? (locationString += `, ${city}`)
-      : (locationString += "");
-    state ? (locationString += `, ${state}`) : (locationString += "");
-    country ? (locationString += `, ${country}`) : (locationString += "");
-
-    return <p>{locationString}</p>;
+  onLocationChange = e => {
+    this.setState({ location: e.target.value });
   };
 
   render() {
-    const { location, times } = this.state;
+    const { location, times, geoInfo } = this.state;
 
     return (
       <div className="App">
-        <h1>Sun Times</h1>
+        <Header />
         <Calendar onChange={date => this.onCalendarChange(date)} />
-        <button onClick={this.getTimes}>Get Data</button>
-        <button onClick={this.getLocation}>Use My Location</button>
-        <input
-          type="text"
-          value={location}
-          onChange={e => this.setState({ location: e.target.value })}
+        <Buttons
+          location={location}
+          onLocationChange={this.onLocationChange}
+          getTimes={this.getTimes}
+          getLocation={this.getLocation}
+          setLocation={this.setLocation}
         />
-        <button onClick={this.setLocation} disabled={!location}>
-          Use Input Location
-        </button>
-        {this.renderLocation()}
+        <Location geoInfo={geoInfo} />
         <Times times={times} />
       </div>
     );
