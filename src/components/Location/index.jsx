@@ -7,7 +7,9 @@ export const Location = ({ geoInfo: { name, city, state, country } }) => {
   city && city !== name
     ? (locationString += `, ${city}`)
     : (locationString += "");
-  state ? (locationString += `, ${state}`) : (locationString += "");
+  state && state !== name
+    ? (locationString += `, ${state}`)
+    : (locationString += "");
   country ? (locationString += `, ${country}`) : (locationString += "");
 
   return (

@@ -10,7 +10,6 @@ export const Buttons = ({
 }) => {
   return (
     <div className={styles.container}>
-      <button onClick={getTimes}>Get Data</button>
       <button onClick={getLocation}>Use My Location</button>
       <input type="text" value={location} onChange={onLocationChange} />
       <button onClick={setLocation} disabled={!location}>

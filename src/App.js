@@ -28,11 +28,12 @@ class App extends Component {
         } = await Axios.get(url);
 
         this.extractGeoData(results);
+        this.getTimes();
       });
     }
   };
 
-  setLocation = () => {
+  setLocation = async () => {
     const { location } = this.state;
 
     if (!location) {
@@ -41,7 +42,8 @@ class App extends Component {
 
     const locationURI = encodeURIComponent(location);
 
-    this.geocodeLocation(locationURI);
+    await this.geocodeLocation(locationURI);
+    this.getTimes();
   };
 
   geocodeLocation = async location => {
