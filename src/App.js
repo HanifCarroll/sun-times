@@ -27,6 +27,8 @@ class App extends Component {
           coords: { latitude, longitude },
         } = position;
 
+        this.setState({ times: {} });
+
         const point = `${latitude},${longitude}`;
         const url = `https://graphhopper.com/api/1/geocode?point=${point}&limit=${RESULTSLIMIT}&reverse=true&key=${APIKEY}`;
 
@@ -44,7 +46,7 @@ class App extends Component {
 
   setLocation = async () => {
     const { location } = this.state;
-    this.setState({ error: "" });
+    this.setState({ error: "", times: {} });
 
     if (!location) {
       return;
@@ -53,6 +55,7 @@ class App extends Component {
     const locationURI = encodeURIComponent(location);
 
     const { lat, lng } = await this.geocodeLocation(locationURI);
+    if (!lat || !lng) return;
     this.getTimeZone({ lat, lng });
     this.getTimes();
   };
@@ -72,18 +75,6 @@ class App extends Component {
     this.setState({ geoInfo: { ...extractedResults } });
 
     return { ...results[0].point };
-  };
-
-  extractGeoData = results => {
-    if (results[0]) {
-      console.log(results[0]);
-      const { country, state, city, name, point } = results[0];
-
-      this.setState({ geoInfo: { country, state, city, name, point } });
-    } else {
-      console.log("Query not found.");
-      this.setState({ geoInfo: {} });
-    }
   };
 
   getTimeZone = ({ lat, lng }) => {

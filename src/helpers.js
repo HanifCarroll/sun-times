@@ -3,12 +3,10 @@ import CoordinateTZ from "coordinate-tz";
 
 export const extractGeoData = results => {
   if (results[0]) {
-    console.log(results[0]);
     const { country, state, city, name, point } = results[0];
 
     return { country, state, city, name, point };
   } else {
-    console.log("Query not found.");
     return {};
   }
 };

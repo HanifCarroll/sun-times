@@ -5,7 +5,11 @@ import styles from "./styles.module.scss";
 export const Calendar = ({ onChange }) => {
   return (
     <div className={styles.container}>
-      <ReactCalendar className={styles.calendar} onChange={onChange} />
+      <ReactCalendar
+        className={styles.calendar}
+        onChange={onChange}
+        calendarType="US"
+      />
     </div>
   );
 };
