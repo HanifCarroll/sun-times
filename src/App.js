@@ -10,11 +10,25 @@ class App extends Component {
     date: null,
   };
 
-  getData = async () => {
-    let url = `https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400`;
+  getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const {
+          coords: { latitude, longitude },
+        } = position;
 
-    if (this.state.date) {
-      url += `&date=${this.state.date}`;
+        this.setState({ lat: latitude, lng: longitude });
+      });
+    }
+  };
+
+  getData = async () => {
+    const { lat, lng, date } = this.state;
+
+    let url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`;
+
+    if (date) {
+      url += `&date=${date}`;
     }
 
     const {
@@ -29,16 +43,13 @@ class App extends Component {
     this.setState({ date });
   };
 
-  componentDidMount() {
-    this.getData();
-  }
-
   render() {
     return (
       <div className="App">
         <h1>App</h1>
         <Calendar onChange={date => this.onCalendarChange(date)} />
         <button onClick={this.getData}>Get Data</button>
+        <button onClick={this.getLocation}>Use My Location</button>
       </div>
     );
   }
