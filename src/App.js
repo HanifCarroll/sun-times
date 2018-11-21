@@ -119,7 +119,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        {console.log(this.state)}
         <Header />
         <Calendar onChange={date => this.onCalendarChange(date)} />
         <Buttons
