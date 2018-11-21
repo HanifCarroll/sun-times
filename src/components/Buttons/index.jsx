@@ -4,7 +4,6 @@ import styles from "./styles.module.scss";
 export const Buttons = ({
   location,
   onLocationChange,
-  getTimes,
   getLocation,
   setLocation,
 }) => {

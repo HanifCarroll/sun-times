@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "date-fns": "^1.29.0",
+    "coordinate-tz": "^0.1.2",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.23",
     "node-sass": "^4.10.0",
     "react": "^16.6.3",
     "react-calendar": "^2.17.5",

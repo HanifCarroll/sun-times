@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Axios from "axios";
-import { format } from "date-fns";
 import { APIKEY, RESULTSLIMIT } from "./config";
 
 import { Header, Calendar, Location, Times, Buttons } from "./components";
+import { convertTimes, getTimezone, convertDate } from "./helpers";
 
 class App extends Component {
   state = {
@@ -28,6 +28,7 @@ class App extends Component {
         } = await Axios.get(url);
 
         this.extractGeoData(results);
+        this.getTimeZone({ lat: latitude, lng: longitude });
         this.getTimes();
       });
     }
@@ -42,7 +43,8 @@ class App extends Component {
 
     const locationURI = encodeURIComponent(location);
 
-    await this.geocodeLocation(locationURI);
+    const { lat, lng } = await this.geocodeLocation(locationURI);
+    this.getTimeZone({ lat, lng });
     this.getTimes();
   };
 
@@ -54,10 +56,13 @@ class App extends Component {
     } = await Axios.get(url);
 
     this.extractGeoData(results);
+
+    return { ...results[0].point };
   };
 
   extractGeoData = results => {
     if (results[0]) {
+      console.log(results[0]);
       const { country, state, city, name, point } = results[0];
 
       this.setState({ geoInfo: { country, state, city, name, point } });
@@ -65,6 +70,12 @@ class App extends Component {
       console.log("Query not found.");
       this.setState({ geoInfo: {} });
     }
+  };
+
+  getTimeZone = ({ lat, lng }) => {
+    const timezone = getTimezone({ lat, lng });
+
+    this.setState({ geoInfo: { ...this.state.geoInfo, timezone } });
   };
 
   getTimes = async () => {
@@ -92,17 +103,18 @@ class App extends Component {
     return url;
   };
 
-  extractTimes = results => {
-    const sunrise = new Date(results.sunrise).toLocaleTimeString();
-    const sunset = new Date(results.sunset).toLocaleTimeString();
-    const noon = new Date(results.solar_noon).toLocaleTimeString();
+  extractTimes = ({ sunrise, sunset, solar_noon }) => {
+    const timezone = this.state.geoInfo.timezone;
+    const times = [sunrise, sunset, solar_noon];
 
-    this.setState({ times: { sunrise, sunset, noon } });
+    [sunrise, sunset, solar_noon] = convertTimes(times, timezone);
+
+    this.setState({ times: { sunrise, sunset, solar_noon } });
   };
 
   onCalendarChange = date => {
-    date = format(date, "YYYY-MM-DD");
-    this.setState({ date });
+    const convertedDate = convertDate(date);
+    this.setState({ date: convertedDate });
   };
 
   onLocationChange = e => {
@@ -114,6 +126,7 @@ class App extends Component {
 
     return (
       <div className="App">
+        {console.log(this.state.geoInfo)}
         <Header />
         <Calendar onChange={date => this.onCalendarChange(date)} />
         <Buttons
