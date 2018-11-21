@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import Axios from "axios";
-
-import { APIKEY, RESULTSLIMIT } from "./config";
 import { Header, Calendar, Location, Times, Buttons } from "./components";
 import {
   extractGeoData,
@@ -10,6 +8,8 @@ import {
   convertDate,
   makeSunURL,
 } from "./helpers";
+
+const API_KEY = process.env.API_KEY || process.env.REACT_APP_API_KEY;
 
 class App extends Component {
   state = {
@@ -26,11 +26,11 @@ class App extends Component {
         const {
           coords: { latitude, longitude },
         } = position;
-
+        const resultsLimit = 1;
         this.setState({ times: {} });
 
         const point = `${latitude},${longitude}`;
-        const url = `https://graphhopper.com/api/1/geocode?point=${point}&limit=${RESULTSLIMIT}&reverse=true&key=${APIKEY}`;
+        const url = `https://graphhopper.com/api/1/geocode?point=${point}&limit=${resultsLimit}&reverse=true&key=${API_KEY}`;
 
         const {
           data: { hits: results },
@@ -61,7 +61,8 @@ class App extends Component {
   };
 
   geocodeLocation = async location => {
-    const url = `https://graphhopper.com/api/1/geocode?q=${location}&limit=${RESULTSLIMIT}&key=${APIKEY}`;
+    const resultsLimit = 1;
+    const url = `https://graphhopper.com/api/1/geocode?q=${location}&limit=${resultsLimit}&key=${API_KEY}`;
 
     const {
       data: { hits: results },
