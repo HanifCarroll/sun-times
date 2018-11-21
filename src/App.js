@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import Axios from "axios";
-import { APIKEY, RESULTSLIMIT } from "./config";
 
+import { APIKEY, RESULTSLIMIT } from "./config";
 import { Header, Calendar, Location, Times, Buttons } from "./components";
-import { convertTimes, getTimezone, convertDate, makeSunURL } from "./helpers";
+import {
+  extractGeoData,
+  convertTimes,
+  getTimezone,
+  convertDate,
+  makeSunURL,
+} from "./helpers";
 
 class App extends Component {
   state = {
@@ -11,6 +17,7 @@ class App extends Component {
     geoInfo: {},
     date: null,
     times: {},
+    error: "",
   };
 
   getLocation = () => {
@@ -27,7 +34,8 @@ class App extends Component {
           data: { hits: results },
         } = await Axios.get(url);
 
-        this.extractGeoData(results);
+        const extractedResults = extractGeoData(results);
+        this.setState({ geoInfo: { ...extractedResults } });
         this.getTimeZone({ lat: latitude, lng: longitude });
         this.getTimes();
       });
@@ -36,6 +44,7 @@ class App extends Component {
 
   setLocation = async () => {
     const { location } = this.state;
+    this.setState({ error: "" });
 
     if (!location) {
       return;
@@ -55,7 +64,11 @@ class App extends Component {
       data: { hits: results },
     } = await Axios.get(url);
 
-    this.extractGeoData(results);
+    if (!results[0]) {
+      return this.setState({ error: "No matches found for that location." });
+    }
+    const extractedResults = extractGeoData(results);
+    this.setState({ geoInfo: { ...extractedResults } });
 
     return { ...results[0].point };
   };
@@ -113,7 +126,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        {console.log(this.state.geoInfo)}
+        {console.log(this.state)}
         <Header />
         <Calendar onChange={date => this.onCalendarChange(date)} />
         <Buttons

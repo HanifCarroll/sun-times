@@ -1,6 +1,18 @@
 import moment from "moment-timezone";
 import CoordinateTZ from "coordinate-tz";
 
+export const extractGeoData = results => {
+  if (results[0]) {
+    console.log(results[0]);
+    const { country, state, city, name, point } = results[0];
+
+    return { country, state, city, name, point };
+  } else {
+    console.log("Query not found.");
+    return {};
+  }
+};
+
 export const getTimezone = ({ lat, lng }) => {
   const { timezone } = CoordinateTZ.calculate(lat, lng);
 
