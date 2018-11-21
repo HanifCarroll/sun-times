@@ -8,6 +8,7 @@ class App extends Component {
     lat: null,
     lng: null,
     date: null,
+    times: {},
   };
 
   getLocation = () => {
@@ -25,7 +26,7 @@ class App extends Component {
   getData = async () => {
     const { lat, lng, date } = this.state;
 
-    let url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`;
+    let url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`;
 
     if (date) {
       url += `&date=${date}`;
@@ -35,7 +36,15 @@ class App extends Component {
       data: { results },
     } = await Axios.get(url).catch(err => console.log(err));
 
-    console.log(results);
+    this.setState({
+      times: { sunrise: results.sunrise, sunset: results.sunset },
+    });
+
+    let sunrise = new Date(results.sunrise).toLocaleTimeString();
+    let sunset = new Date(results.sunset).toLocaleTimeString();
+    let noon = new Date(results.solar_noon).toLocaleTimeString();
+
+    this.setState({ times: { sunrise, sunset, noon } });
   };
 
   onCalendarChange = date => {
