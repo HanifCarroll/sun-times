@@ -53,12 +53,18 @@ class App extends Component {
   };
 
   render() {
+    const { sunrise, sunset, noon } = this.state.times;
+
     return (
       <div className="App">
         <h1>App</h1>
         <Calendar onChange={date => this.onCalendarChange(date)} />
         <button onClick={this.getData}>Get Data</button>
         <button onClick={this.getLocation}>Use My Location</button>
+
+        <p>Sunrise - {sunrise}</p>
+        <p>Noon - {noon}</p>
+        <p>Sunset - {sunset}</p>
       </div>
     );
   }
