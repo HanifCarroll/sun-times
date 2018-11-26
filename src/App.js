@@ -18,11 +18,13 @@ class App extends Component {
     date: null,
     times: {},
     error: "",
+    gpsPressed: false,
   };
 
   getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async position => {
+        this.setState({ gpsPressed: true, location: "Current Location" });
         const {
           coords: { latitude, longitude },
         } = position;
@@ -115,7 +117,7 @@ class App extends Component {
   };
 
   render() {
-    const { location, times, geoInfo, error } = this.state;
+    const { location, times, geoInfo, error, gpsPressed } = this.state;
 
     return (
       <div className="App">
@@ -127,6 +129,7 @@ class App extends Component {
           getTimes={this.getTimes}
           getLocation={this.getLocation}
           setLocation={this.setLocation}
+          gpsPressed={gpsPressed}
         />
         <Location geoInfo={geoInfo} error={error} />
         <Times times={times} />

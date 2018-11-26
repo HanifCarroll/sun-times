@@ -1,4 +1,5 @@
 import React from "react";
+import { IoMdLocate } from "react-icons/io";
 import styles from "./styles.module.scss";
 
 export const Buttons = ({
@@ -6,6 +7,7 @@ export const Buttons = ({
   onLocationChange,
   getLocation,
   setLocation,
+  gpsPressed,
 }) => {
   const onEnterPress = e => {
     if (e.key === "Enter" && location) {
@@ -21,12 +23,16 @@ export const Buttons = ({
         value={location}
         onChange={onLocationChange}
         placeholder="Enter location..."
+        style={{ color: gpsPressed ? "#67d6ff" : "white" }}
       />
-      <div className={styles.buttons}>
-        <button className={styles.button} onClick={getLocation}>
-          Use My Location
-        </button>
-      </div>
+      <button
+        className={styles.button}
+        style={{ color: gpsPressed ? "#67d6ff" : "white" }}
+        onClick={getLocation}
+      >
+        <IoMdLocate />
+      </button>
+      <div className={styles.buttons} />
     </div>
   );
 };
