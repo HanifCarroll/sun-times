@@ -6,17 +6,16 @@ html {
   background-image: url("images/sunset.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  height: 100vh;
 }
+
 body {
   margin: 0;
   padding: 0;
   color: white;
 }
 
-.App {
-  height: 97vh;
-}
-
+/* React Calendar Styles */
 time {
   color: white;
 }
@@ -28,3 +27,4 @@ time {
 .react-calendar__navigation__label {
   color: white;
 }
+/* React Calendar Styles */
