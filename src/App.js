@@ -120,7 +120,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Calendar onChange={date => this.onCalendarChange(date)} />
+        {/* <Calendar onChange={date => this.onCalendarChange(date)} /> */}
         <Buttons
           location={location}
           onLocationChange={this.onLocationChange}

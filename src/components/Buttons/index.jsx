@@ -7,13 +7,26 @@ export const Buttons = ({
   getLocation,
   setLocation,
 }) => {
+  const onEnterPress = e => {
+    if (e.key === "Enter" && location) {
+      setLocation();
+    }
+  };
   return (
     <div className={styles.container}>
-      <button onClick={getLocation}>Use My Location</button>
-      <input type="text" value={location} onChange={onLocationChange} />
-      <button onClick={setLocation} disabled={!location}>
-        Use Input Location
-      </button>
+      <input
+        className={styles.input}
+        onKeyPress={e => onEnterPress(e)}
+        type="text"
+        value={location}
+        onChange={onLocationChange}
+        placeholder="Enter location..."
+      />
+      <div className={styles.buttons}>
+        <button className={styles.button} onClick={getLocation}>
+          Use My Location
+        </button>
+      </div>
     </div>
   );
 };
