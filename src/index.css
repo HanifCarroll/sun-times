@@ -2,7 +2,28 @@
   box-sizing: border-box;
 }
 
+html {
+  background-image: url("images/sunset.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 body {
   margin: 0;
   padding: 0;
+}
+
+.App {
+  height: 97vh;
+}
+
+time {
+  color: white;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  color: white;
+}
+
+.react-calendar__navigation__label {
+  color: white;
 }
