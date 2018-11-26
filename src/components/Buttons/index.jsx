@@ -7,7 +7,7 @@ export const Buttons = ({
   onLocationChange,
   getLocation,
   setLocation,
-  gpsPressed,
+  isGPSActive,
 }) => {
   const onEnterPress = e => {
     if (e.key === "Enter" && location) {
@@ -23,11 +23,11 @@ export const Buttons = ({
         value={location}
         onChange={onLocationChange}
         placeholder="Enter location..."
-        style={{ color: gpsPressed ? "#67d6ff" : "white" }}
+        style={{ color: isGPSActive ? "#67d6ff" : "white" }}
       />
       <button
         className={styles.button}
-        style={{ color: gpsPressed ? "#67d6ff" : "white" }}
+        style={{ color: isGPSActive ? "#67d6ff" : "white" }}
         onClick={getLocation}
       >
         <IoMdLocate />
