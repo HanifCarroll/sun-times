@@ -19,6 +19,8 @@ class App extends Component {
     times: {},
     error: "",
     isGPSActive: false,
+    isCalendarOpen: false,
+    isDatePicked: false,
   };
 
   getLocation = () => {
@@ -109,7 +111,11 @@ class App extends Component {
 
   onCalendarChange = date => {
     const convertedDate = convertDate(date);
-    this.setState({ date: convertedDate });
+    this.setState({
+      date: convertedDate,
+      isCalendarOpen: false,
+      isDatePicked: true,
+    });
   };
 
   onLocationChange = e => {
@@ -122,20 +128,39 @@ class App extends Component {
     this.setState({ location: e.target.value });
   };
 
+  onCalendarToggle = () => {
+    const { isCalendarOpen } = this.state;
+
+    this.setState({ isCalendarOpen: !isCalendarOpen });
+  };
+
   render() {
-    const { location, times, geoInfo, error, isGPSActive } = this.state;
+    const {
+      location,
+      times,
+      geoInfo,
+      error,
+      isGPSActive,
+      isCalendarOpen,
+      isDatePicked,
+    } = this.state;
 
     return (
       <div className="App">
         <Header />
-        {/* <Calendar onChange={date => this.onCalendarChange(date)} /> */}
         <Buttons
           location={location}
           onLocationChange={this.onLocationChange}
+          onCalendarToggle={this.onCalendarToggle}
           getTimes={this.getTimes}
           getLocation={this.getLocation}
           setLocation={this.setLocation}
           isGPSActive={isGPSActive}
+          isDatePicked={isDatePicked}
+        />
+        <Calendar
+          isCalendarOpen={isCalendarOpen}
+          onChange={date => this.onCalendarChange(date)}
         />
         <Location geoInfo={geoInfo} error={error} />
         <Times times={times} />

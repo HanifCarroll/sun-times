@@ -1,5 +1,5 @@
 import React from "react";
-import { IoMdLocate } from "react-icons/io";
+import { IoMdLocate, IoMdCalendar } from "react-icons/io";
 import styles from "./styles.module.scss";
 
 export const Buttons = ({
@@ -8,6 +8,8 @@ export const Buttons = ({
   getLocation,
   setLocation,
   isGPSActive,
+  onCalendarToggle,
+  isDatePicked,
 }) => {
   const onEnterPress = e => {
     if (e.key === "Enter" && location) {
@@ -16,6 +18,13 @@ export const Buttons = ({
   };
   return (
     <div className={styles.container}>
+      <button
+        className={styles.button}
+        style={{ color: isDatePicked ? "#67d6ff" : "white" }}
+        onClick={onCalendarToggle}
+      >
+        <IoMdCalendar />
+      </button>
       <input
         className={styles.input}
         onKeyPress={e => onEnterPress(e)}
