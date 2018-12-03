@@ -10,7 +10,6 @@ export const Buttons = ({
   setLocation,
   isGPSActive,
   onCalendarToggle,
-  isDatePicked,
 }) => {
   const onEnterPress = e => {
     if (e.key === "Enter" && location) {

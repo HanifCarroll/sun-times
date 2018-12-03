@@ -29,7 +29,6 @@ class App extends Component {
     isRequestDone: false,
     isGPSActive: false,
     isCalendarOpen: false,
-    isDatePicked: false,
   };
 
   getLocation = () => {
@@ -131,7 +130,6 @@ class App extends Component {
     this.setState({
       date: convertedDate,
       isCalendarOpen: false,
-      isDatePicked: true,
     });
 
     if (this.state.geoInfo.point) {
@@ -173,13 +171,7 @@ class App extends Component {
   };
 
   render() {
-    const {
-      date,
-      location,
-      isGPSActive,
-      isCalendarOpen,
-      isDatePicked,
-    } = this.state;
+    const { date, location, isGPSActive, isCalendarOpen } = this.state;
 
     return (
       <div className="App">
@@ -193,7 +185,6 @@ class App extends Component {
           getLocation={this.getLocation}
           setLocation={this.setLocation}
           isGPSActive={isGPSActive}
-          isDatePicked={isDatePicked}
         />
         <Calendar
           isCalendarOpen={isCalendarOpen}
