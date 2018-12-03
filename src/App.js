@@ -126,7 +126,6 @@ class App extends Component {
   };
 
   onCalendarChange = date => {
-    const { lat, lng } = this.state.geoInfo.point;
     const convertedDate = convertDate(date);
 
     this.setState({
@@ -135,7 +134,7 @@ class App extends Component {
       isDatePicked: true,
     });
 
-    if (lat && lng) {
+    if (this.state.geoInfo.point) {
       this.getTimes();
     }
   };
