@@ -126,12 +126,18 @@ class App extends Component {
   };
 
   onCalendarChange = date => {
+    const { lat, lng } = this.state.geoInfo.point;
     const convertedDate = convertDate(date);
+
     this.setState({
       date: convertedDate,
       isCalendarOpen: false,
       isDatePicked: true,
     });
+
+    if (lat && lng) {
+      this.getTimes();
+    }
   };
 
   onLocationChange = e => {
