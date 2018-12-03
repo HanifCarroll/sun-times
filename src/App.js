@@ -15,7 +15,7 @@ class App extends Component {
   state = {
     location: "",
     geoInfo: {},
-    date: null,
+    date: convertDate(new Date()),
     times: {},
     error: "",
     isGPSActive: false,
@@ -136,6 +136,7 @@ class App extends Component {
 
   render() {
     const {
+      date,
       location,
       times,
       geoInfo,
@@ -149,6 +150,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <Buttons
+          date={date}
           location={location}
           onLocationChange={this.onLocationChange}
           onCalendarToggle={this.onCalendarToggle}
