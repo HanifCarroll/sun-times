@@ -19,6 +19,14 @@ export const Buttons = ({
   };
   return (
     <div className={styles.container}>
+      <button
+        id="location"
+        className={styles.button}
+        style={{ color: isGPSActive ? "#67d6ff" : "white" }}
+        onClick={getLocation}
+      >
+        <IoMdLocate />
+      </button>
       <input
         className={styles.input}
         onKeyPress={e => onEnterPress(e)}
@@ -28,22 +36,14 @@ export const Buttons = ({
         placeholder="Enter location..."
         style={{ color: isGPSActive ? "#67d6ff" : "white" }}
       />
-      <button
-        id="location"
-        className={styles.button}
-        style={{ color: isGPSActive ? "#67d6ff" : "white" }}
-        onClick={getLocation}
-      >
-        <IoMdLocate />
-      </button>
       <div className={styles.calendarContainer}>
         <button
           id="date"
           className={styles.calendarButton}
           onClick={onCalendarToggle}
         >
-          <p className={styles.dateText}>{date}</p>
           <IoMdCalendar className={styles.calendarIcon} />
+          <p className={styles.dateText}>{date}</p>
         </button>
       </div>
     </div>
