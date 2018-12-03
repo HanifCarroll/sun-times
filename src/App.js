@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import Axios from "axios";
-import { Header, Calendar, Location, Times, Buttons } from "./components";
+import {
+  Header,
+  Calendar,
+  Location,
+  Times,
+  Buttons,
+  Spinner,
+} from "./components";
 import {
   extractGeoData,
   convertTimes,
@@ -18,6 +25,8 @@ class App extends Component {
     date: convertDate(new Date()),
     times: {},
     error: "",
+    isLoading: false,
+    isRequestDone: false,
     isGPSActive: false,
     isCalendarOpen: false,
     isDatePicked: false,
@@ -31,7 +40,7 @@ class App extends Component {
           coords: { latitude, longitude },
         } = position;
         const resultsLimit = 1;
-        this.setState({ times: {} });
+        this.setState({ times: {}, isLoading: true, isRequestDone: false });
 
         const point = `${latitude},${longitude}`;
         const url = `https://graphhopper.com/api/1/geocode?point=${point}&limit=${resultsLimit}&reverse=true&key=${API_KEY}`;
@@ -50,7 +59,12 @@ class App extends Component {
 
   setLocation = async () => {
     const { location } = this.state;
-    this.setState({ error: "", times: {} });
+    this.setState({
+      error: "",
+      times: {},
+      isLoading: true,
+      isRequestDone: false,
+    });
 
     if (!location) {
       return;
@@ -98,6 +112,8 @@ class App extends Component {
     } = await Axios.get(url).catch(err => console.log(err));
 
     this.extractTimes(results);
+
+    this.setState({ isLoading: false, isRequestDone: true });
   };
 
   extractTimes = ({ sunrise, sunset, solar_noon }) => {
@@ -134,13 +150,27 @@ class App extends Component {
     this.setState({ isCalendarOpen: !isCalendarOpen });
   };
 
+  renderDataOrLoading = () => {
+    const { isLoading, isRequestDone, times, geoInfo, error } = this.state;
+
+    if (!isLoading && isRequestDone) {
+      return (
+        <div>
+          <Location geoInfo={geoInfo} error={error} />
+          <Times times={times} />
+        </div>
+      );
+    }
+
+    if (isLoading) {
+      return <Spinner />;
+    }
+  };
+
   render() {
     const {
       date,
       location,
-      times,
-      geoInfo,
-      error,
       isGPSActive,
       isCalendarOpen,
       isDatePicked,
@@ -164,8 +194,7 @@ class App extends Component {
           isCalendarOpen={isCalendarOpen}
           onChange={date => this.onCalendarChange(date)}
         />
-        <Location geoInfo={geoInfo} error={error} />
-        <Times times={times} />
+        {this.renderDataOrLoading()}
       </div>
     );
   }

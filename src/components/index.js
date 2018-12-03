@@ -3,3 +3,4 @@ export * from "./Calendar";
 export * from "./Buttons";
 export * from "./Location";
 export * from "./Times";
+export * from "./Spinner";
